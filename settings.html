@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>الإعدادات - منظومة الكابتن سعيد</title>
+<style>
+:root{--bg:#f0f4f8;--surface:#fff;--surface2:#f1f5f9;--border:#94a3b8;--text:#0f172a;--text-muted:#475569;--accent:#f59e0b;--primary:#1e40af;--primary-light:#3b82f6;--danger:#dc2626;--success:#16a34a;--shadow:0 4px 20px rgba(0,0,0,.08);--radius:14px;--header-bg:#1e3a8a;--header-text:#fff;--input-bg:#fff;--modal-bg:#fff;}
+[data-theme="dark"]{--bg:#0a0f1e;--surface:#111827;--surface2:#1e293b;--border:#334155;--text:#f1f5f9;--text-muted:#94a3b8;--accent:#fbbf24;--primary:#3b82f6;--primary-light:#60a5fa;--danger:#ef4444;--success:#22c55e;--shadow:0 4px 24px rgba(0,0,0,.4);--header-bg:#0f172a;--header-text:#fbbf24;--input-bg:#1e293b;--modal-bg:#1e293b;}
+[data-theme="ocean"]{--bg:#e0f2fe;--surface:#f0f9ff;--surface2:#bae6fd;--border:#7dd3fc;--text:#0c4a6e;--text-muted:#0369a1;--accent:#0ea5e9;--primary:#0284c7;--primary-light:#38bdf8;--danger:#dc2626;--success:#0d9488;--shadow:0 4px 20px rgba(14,165,233,.15);--header-bg:#0c4a6e;--header-text:#e0f2fe;--input-bg:#f0f9ff;--modal-bg:#f0f9ff;}
+[data-theme="forest"]{--bg:#f0fdf4;--surface:#fff;--surface2:#dcfce7;--border:#86efac;--text:#14532d;--text-muted:#166534;--accent:#22c55e;--primary:#16a34a;--primary-light:#4ade80;--danger:#dc2626;--success:#15803d;--shadow:0 4px 20px rgba(22,163,74,.12);--header-bg:#14532d;--header-text:#f0fdf4;--input-bg:#fff;--modal-bg:#fff;}
+[data-theme="warm"]{--bg:#fffbeb;--surface:#fff;--surface2:#fef3c7;--border:#fbbf24;--text:#78350f;--text-muted:#92400e;--accent:#f59e0b;--primary:#d97706;--primary-light:#fbbf24;--danger:#dc2626;--success:#16a34a;--shadow:0 4px 20px rgba(245,158,11,.15);--header-bg:#78350f;--header-text:#fffbeb;--input-bg:#fff;--modal-bg:#fff;}
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Segoe UI",Cairo,Arial,sans-serif;transition:background-color .3s,color .3s,border-color .3s;}
+body{background:var(--bg);color:var(--text);min-height:100vh;}
+::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--surface2);}::-webkit-scrollbar-thumb{background:var(--primary);border-radius:3px;}
+
+/* HEADER */
+.settings-header{background:var(--header-bg);color:var(--header-text);padding:14px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.3);}
+.back-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:inherit;padding:8px 16px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
+.back-btn:hover{background:rgba(255,255,255,.25);}
+.header-title-set{font-size:clamp(17px,4vw,22px);font-weight:900;color:#fbbf24;}
+
+/* CONTAINER */
+.settings-body{max-width:820px;margin:0 auto;padding:clamp(12px,3vw,28px);}
+
+/* CARD */
+.s-card{background:var(--surface);border-radius:var(--radius);padding:22px 20px;margin-bottom:18px;border:1px solid var(--border);box-shadow:var(--shadow);}
+.s-card-title{font-size:16px;font-weight:900;color:var(--primary);margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:8px;}
+.s-card-title .icon{font-size:20px;}
+
+/* THEME GRID */
+.theme-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;}
+.theme-btn{border:3px solid var(--border);border-radius:12px;padding:14px 10px;cursor:pointer;font-size:13px;font-weight:700;text-align:center;transition:all .2s;background:var(--surface2);color:var(--text);}
+.theme-btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.12);}
+.theme-btn.active{border-color:var(--primary);box-shadow:0 0 0 3px rgba(30,64,175,.2);}
+.theme-preview{width:100%;height:40px;border-radius:8px;margin-bottom:8px;display:block;}
+.t-light .theme-preview{background:linear-gradient(135deg,#f0f4f8 50%,#1e40af 50%);}
+.t-dark .theme-preview{background:linear-gradient(135deg,#0a0f1e 50%,#3b82f6 50%);}
+.t-ocean .theme-preview{background:linear-gradient(135deg,#e0f2fe 50%,#0284c7 50%);}
+.t-forest .theme-preview{background:linear-gradient(135deg,#f0fdf4 50%,#16a34a 50%);}
+.t-warm .theme-preview{background:linear-gradient(135deg,#fffbeb 50%,#d97706 50%);}
+
+/* FORM ELEMENTS */
+.s-field{margin-bottom:14px;}
+.s-field label{display:block;font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:6px;}
+.s-input{width:100%;padding:12px 14px;border-radius:10px;border:2px solid var(--border);background:var(--input-bg);color:var(--text);font-size:15px;font-weight:700;outline:none;transition:border-color .2s;}
+.s-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(30,64,175,.1);}
+.s-input[type="number"]{text-align:center;}
+.s-input[type="color"]{height:46px;padding:4px 8px;cursor:pointer;}
+
+/* BUTTONS */
+.s-btn{padding:12px 22px;border-radius:10px;border:none;cursor:pointer;font-size:14px;font-weight:900;transition:all .2s;display:inline-flex;align-items:center;gap:7px;}
+.s-btn:hover{filter:brightness(1.1);transform:translateY(-1px);}
+.s-btn:active{transform:translateY(0);}
+.s-btn-primary{background:linear-gradient(135deg,#1d4ed8,#1e40af);color:#fff;}
+.s-btn-danger{background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;}
+.s-btn-success{background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;}
+.s-btn-gray{background:linear-gradient(135deg,#475569,#334155);color:#fff;}
+.s-btn-orange{background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;}
+.s-btn-whatsapp{background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;}
+.s-btn-sm{padding:8px 14px;font-size:13px;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+
+/* TOGGLE SWITCH */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);}
+.toggle-row:last-child{border-bottom:none;}
+.toggle-label{font-size:14px;font-weight:700;color:var(--text);}
+.toggle-sub{font-size:12px;color:var(--text-muted);margin-top:2px;}
+.toggle{position:relative;width:52px;height:28px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:#94a3b8;border-radius:28px;cursor:pointer;transition:.3s;}
+.toggle-slider::before{content:'';position:absolute;width:22px;height:22px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.3s;}
+input:checked+.toggle-slider{background:var(--primary);}
+input:checked+.toggle-slider::before{transform:translateX(24px);}
+
+/* MULTIPLIER TABLE */
+.mult-table{width:100%;border-collapse:collapse;}
+.mult-table th,.mult-table td{padding:10px 12px;text-align:center;border-bottom:1px solid var(--border);font-size:14px;}
+.mult-table th{font-weight:900;color:var(--text-muted);font-size:12px;background:var(--surface2);}
+.mult-table td:first-child{text-align:right;font-weight:700;color:var(--text);}
+.mult-input{width:80px;padding:7px;border-radius:8px;border:2px solid var(--border);background:var(--input-bg);color:var(--text);text-align:center;font-size:15px;font-weight:900;outline:none;}
+.mult-input:focus{border-color:var(--primary);}
+
+/* SEGMENT CONTROL */
+.seg-ctrl{display:flex;background:var(--surface2);border-radius:10px;padding:3px;gap:3px;}
+.seg-btn{flex:1;padding:9px 6px;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;background:transparent;color:var(--text-muted);transition:all .2s;}
+.seg-btn.active{background:var(--surface);color:var(--primary);font-weight:900;box-shadow:0 2px 8px rgba(0,0,0,.1);}
+
+/* COLUMN TOGGLE GRID */
+.col-toggle-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
+.col-toggle-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:2px solid var(--border);background:var(--surface2);cursor:pointer;font-size:14px;font-weight:700;user-select:none;transition:all .2s;}
+.col-toggle-item.active{border-color:var(--primary);background:rgba(30,64,175,.08);}
+.col-toggle-item input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:var(--primary);}
+
+/* TABLE COLOR BADGES */
+.tbl-color-grid{display:flex;gap:8px;flex-wrap:wrap;}
+.tbl-color-item{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;}
+.tbl-color-swatch{width:36px;height:36px;border-radius:50%;border:3px solid transparent;transition:all .2s;}
+.tbl-color-swatch:hover,.tbl-color-swatch.active{border-color:var(--text);transform:scale(1.15);}
+.tbl-color-label{font-size:11px;color:var(--text-muted);font-weight:700;}
+
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;}
+.stat-box{background:var(--surface2);border-radius:12px;padding:14px;text-align:center;border:1px solid var(--border);}
+.stat-box-val{font-size:22px;font-weight:900;color:var(--primary);}
+.stat-box-label{font-size:11px;color:var(--text-muted);margin-top:4px;}
+
+/* SHORTCUT TABLE */
+.shortcut-table{width:100%;border-collapse:collapse;}
+.shortcut-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:14px;}
+.shortcut-table tr:last-child td{border-bottom:none;}
+.shortcut-table .key{display:inline-block;background:var(--surface2);border:2px solid var(--border);border-radius:6px;padding:2px 10px;font-family:monospace;font-size:13px;font-weight:900;color:var(--primary);}
+
+/* PRINT OPTIONS */
+.print-options{display:flex;gap:12px;flex-wrap:wrap;}
+.print-opt{flex:1;min-width:80px;border:2px solid var(--border);border-radius:10px;padding:14px 8px;cursor:pointer;text-align:center;font-size:14px;font-weight:700;transition:all .2s;background:var(--surface2);color:var(--text);}
+.print-opt:hover{border-color:var(--primary);}
+.print-opt.active{border-color:var(--primary);background:var(--primary);color:#fff;}
+.print-opt .opt-num{font-size:28px;font-weight:900;display:block;margin-bottom:4px;}
+
+/* ABOUT */
+.about-logo{text-align:center;margin-bottom:16px;}
+.about-logo .big-icon{font-size:60px;display:block;margin-bottom:8px;}
+.about-name{font-size:20px;font-weight:900;color:var(--primary);}
+.about-version{font-size:13px;color:var(--text-muted);margin-top:4px;}
+.about-desc{font-size:14px;color:var(--text-muted);line-height:1.7;text-align:center;margin-top:12px;}
+.about-info{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+.about-item{background:var(--surface2);border-radius:10px;padding:12px;text-align:center;}
+.about-item-val{font-size:18px;font-weight:900;color:var(--primary);}
+.about-item-label{font-size:11px;color:var(--text-muted);margin-top:3px;}
+
+/* CONTACT */
+.contact-card{display:flex;align-items:center;gap:14px;background:var(--surface2);border-radius:12px;padding:16px;}
+.contact-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#25d366,#128c7e);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;}
+.contact-name{font-size:16px;font-weight:900;color:var(--text);}
+.contact-phone{font-size:13px;color:var(--text-muted);margin-top:3px;direction:ltr;text-align:right;}
+
+/* BACKUP REMINDER BADGE */
+.backup-status{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:10px;font-size:14px;font-weight:700;margin-bottom:14px;}
+.backup-ok{background:rgba(22,163,74,.1);border:1px solid rgba(22,163,74,.3);color:var(--success);}
+.backup-warn{background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);color:var(--danger);}
+
+/* PROGRESS BAR */
+.storage-bar{width:100%;height:12px;background:var(--surface2);border-radius:8px;overflow:hidden;margin-top:6px;}
+.storage-fill{height:100%;border-radius:8px;transition:width .5s ease;background:linear-gradient(90deg,var(--primary),var(--primary-light));}
+
+/* TOAST & MODAL */
+#toast-set{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:12px 26px;border-radius:30px;font-weight:700;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;box-shadow:0 6px 20px rgba(0,0,0,.3);}
+#toast-set.show{opacity:1;}
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:10000;justify-content:center;align-items:center;backdrop-filter:blur(4px);}
+.modal-ov.show{display:flex;}
+.modal-box{background:var(--modal-bg);padding:30px;border-radius:20px;width:min(380px,92vw);border:2px solid var(--primary);box-shadow:0 20px 60px rgba(0,0,0,.35);animation:su .25s ease;}
+@keyframes su{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.modal-box h3{font-size:18px;font-weight:900;color:var(--primary);margin-bottom:18px;text-align:center;}
+.modal-btns{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+
+@media(max-width:500px){.s-btn{padding:10px 14px;font-size:13px;}}
+</style>
+</head>
+<body>
+
+<header class="settings-header">
+  <a class="back-btn" href="index.html">← رجوع</a>
+  <div class="header-title-set">⚙️ الإعدادات</div>
+</header>
+
+<div class="settings-body">
+
+<!-- ══════════════════════════════════════════════════════
+     1. THEMES
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">🎨</span> تغيير الثيم</div>
+  <div class="theme-grid">
+    <div class="theme-btn t-light" onclick="setTheme('light')" id="th-light"><span class="theme-preview"></span>☀️ فاتح</div>
+    <div class="theme-btn t-dark"  onclick="setTheme('dark')"  id="th-dark"> <span class="theme-preview"></span>🌙 داكن</div>
+    <div class="theme-btn t-ocean" onclick="setTheme('ocean')" id="th-ocean"><span class="theme-preview"></span>🌊 أزرق</div>
+    <div class="theme-btn t-forest" onclick="setTheme('forest')" id="th-forest"><span class="theme-preview"></span>🌿 أخضر</div>
+    <div class="theme-btn t-warm"  onclick="setTheme('warm')"  id="th-warm"> <span class="theme-preview"></span>🌅 دافئ</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     2. IDENTITY  (ميزة 1 + 2 + 3)
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">🪪</span> هوية المنظومة</div>
+  <div class="s-field">
+    <!-- ميزة 1: اسم صاحب المنظومة -->
+    <label>اسم صاحب المنظومة (يظهر في الهيدر وصفحة الدخول)</label>
+    <input class="s-input" type="text" id="owner_name" placeholder="مثال: الكابتن سعيد" maxlength="40"/>
+  </div>
+  <div class="s-field">
+    <!-- ميزة 2: رقم الوحدة / القسم -->
+    <label>اسم الوحدة / القسم (يظهر في الطباعة)</label>
+    <input class="s-input" type="text" id="unit_name" placeholder="مثال: الإدارة العامة - قسم التصاريح" maxlength="60"/>
+  </div>
+  <div class="s-field">
+    <!-- ميزة 3: رأس الطباعة المخصص -->
+    <label>نص إضافي في رأس صفحة الطباعة</label>
+    <input class="s-input" type="text" id="print_header" placeholder="مثال: سري - للاستخدام الداخلي فقط" maxlength="80"/>
+  </div>
+  <div class="btn-row">
+    <button class="s-btn s-btn-success" onclick="saveIdentity()">💾 حفظ</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     3. PASSWORD
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">🔐</span> تغيير كلمة المرور</div>
+  <div class="s-field"><label>كلمة المرور الحالية</label><input class="s-input" type="password" id="oldPass" placeholder="أدخل كلمة المرور الحالية..."/></div>
+  <div class="s-field"><label>كلمة المرور الجديدة</label><input class="s-input" type="password" id="newPass" placeholder="أدخل كلمة المرور الجديدة..."/></div>
+  <div class="s-field"><label>تأكيد كلمة المرور الجديدة</label><input class="s-input" type="password" id="confirmPass" placeholder="أعد كتابة كلمة المرور..."/></div>
+  <div class="btn-row"><button class="s-btn s-btn-primary" onclick="changePassword()">💾 حفظ كلمة المرور</button></div>
+  <div id="pass-msg" style="margin-top:10px;font-size:14px;font-weight:700;min-height:18px;"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     4. TABLE APPEARANCE  (ميزة 4 + 5 + 6)
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">📐</span> مظهر الجداول</div>
+
+  <!-- ميزة 4: حجم خط الجداول -->
+  <div class="s-field">
+    <label>حجم الخط داخل الجداول</label>
+    <div class="seg-ctrl" id="fontSizeCtrl">
+      <button class="seg-btn" onclick="setFontSize('sm')" id="fs-sm">صغير</button>
+      <button class="seg-btn" onclick="setFontSize('md')" id="fs-md">متوسط</button>
+      <button class="seg-btn" onclick="setFontSize('lg')" id="fs-lg">كبير</button>
+    </div>
+  </div>
+
+  <!-- ميزة 5: ارتفاع صفوف الجدول -->
+  <div class="s-field" style="margin-top:16px;">
+    <label>ارتفاع صفوف الجدول</label>
+    <div class="seg-ctrl" id="rowHeightCtrl">
+      <button class="seg-btn" onclick="setRowHeight('compact')" id="rh-compact">ضيق</button>
+      <button class="seg-btn" onclick="setRowHeight('normal')" id="rh-normal">عادي</button>
+      <button class="seg-btn" onclick="setRowHeight('comfort')" id="rh-comfort">مريح</button>
+    </div>
+  </div>
+
+  <!-- ميزة 6: لون التمييز -->
+  <div class="s-field" style="margin-top:16px;">
+    <label>لون تمييز الصفوف المميزة (⭐)</label>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <input class="s-input" type="color" id="mark_color" value="#fef3c7" style="width:70px;"/>
+      <span style="font-size:13px;color:var(--text-muted);">اختر اللون المناسب لتمييز الصفوف المهمة</span>
+    </div>
+  </div>
+
+  <div class="btn-row"><button class="s-btn s-btn-success" onclick="saveAppearance()">💾 حفظ المظهر</button></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     5. COLUMN VISIBILITY  (ميزة 7)
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">👁️</span> إخفاء / إظهار الأعمدة</div>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">اختر الأعمدة التي تريد إظهارها في الجداول. الأعمدة المخفية لا تُطبع ولا تُصدَّر.</p>
+  <div class="col-toggle-grid" id="colToggleGrid">
+    <label class="col-toggle-item active"><input type="checkbox" id="col_a"   checked onchange="saveColVisibility()"/> أمانات</label>
+    <label class="col-toggle-item active"><input type="checkbox" id="col_s"   checked onchange="saveColVisibility()"/> ط.شهيد</label>
+    <label class="col-toggle-item active"><input type="checkbox" id="col_p"   checked onchange="saveColVisibility()"/> ط.شرطة</label>
+    <label class="col-toggle-item active"><input type="checkbox" id="col_old" checked onchange="saveColVisibility()"/> مسنين</label>
+    <label class="col-toggle-item active"><input type="checkbox" id="col_dis" checked onchange="saveColVisibility()"/> إعاقة</label>
+    <label class="col-toggle-item active"><input type="checkbox" id="col_m"   checked onchange="saveColVisibility()"/> ميكنة</label>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     6. PROTECTION  (ميزة 8 + 9 + 10 + 11)
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">🛡️</span> الحماية والتحقق</div>
+
+  <!-- ميزة 8: تأكيد قبل الحذف -->
+  <div class="toggle-row">
+    <div>
+      <div class="toggle-label">تأكيد قبل حذف الصف أو الجدول</div>
+      <div class="toggle-sub">يظهر نافذة تأكيد لحماية البيانات من الحذف الخطأ</div>
+    </div>
+    <label class="toggle"><input type="checkbox" id="confirm_delete" onchange="saveProt()"/><span class="toggle-slider"></span></label>
+  </div>
+
+  <!-- ميزة 9: قفل الجداول المكتملة -->
+  <div class="toggle-row">
+    <div>
+      <div class="toggle-label">قفل الجداول المكتملة ضد التعديل</div>
+      <div class="toggle-sub">يمنع تعديل أي خلية في جدول ممتلئ (30/30)</div>
+    </div>
+    <label class="toggle"><input type="checkbox" id="lock_done" onchange="saveProt()"/><span class="toggle-slider"></span></label>
+  </div>
+
+  <!-- ميزة 10: الحد الأقصى لعدد الحركات -->
+  <div class="toggle-row" style="flex-wrap:wrap;gap:10px;">
+    <div style="flex:1;min-width:200px;">
+      <div class="toggle-label">الحد الأقصى لعدد الحركات في الصف</div>
+      <div class="toggle-sub">تحذير إذا أدخلت رقماً أكبر من هذا الحد (0 = تعطيل)</div>
+    </div>
+    <input class="mult-input" type="number" id="max_count" min="0" max="9999" placeholder="0" style="width:90px;"/>
+  </div>
+
+  <!-- ميزة 11: حد الإنذار للأمانات -->
+  <div class="toggle-row" style="flex-wrap:wrap;gap:10px;border-bottom:none;">
+    <div style="flex:1;min-width:200px;">
+      <div class="toggle-label">حد الإنذار لإجمالي الأمانات (كل الجداول)</div>
+      <div class="toggle-sub">ينبّه في الإحصائيات إذا تجاوز المجموع هذا الرقم (0 = تعطيل)</div>
+    </div>
+    <input class="mult-input" type="number" id="alert_amanat" min="0" placeholder="0" style="width:90px;"/>
+  </div>
+
+  <div class="btn-row" style="margin-top:14px;"><button class="s-btn s-btn-success" onclick="saveProt()">💾 حفظ</button></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     7. NOTIFICATIONS & DISPLAY  (ميزة 12 + 13 + 14)
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">🔔</span> الإشعارات والعرض</div>
+
+  <!-- ميزة 12: تنبيه صوتي -->
+  <div class="toggle-row">
+    <div>
+      <div class="toggle-label">تنبيه صوتي عند إضافة صف</div>
+      <div class="toggle-sub">صوت نقرة خفيف عند كل إضافة ناجحة</div>
+    </div>
+    <label class="toggle"><input type="checkbox" id="sound_on" onchange="saveDisplay()"/><span class="toggle-slider"></span></label>
+  </div>
+
+  <!-- ميزة 13: إخفاء الجداول الفارغة -->
+  <div class="toggle-row">
+    <div>
+      <div class="toggle-label">إخفاء الجداول الفارغة تلقائياً</div>
+      <div class="toggle-sub">في وضع سكرول، الجداول التي لم يُدخل فيها شيء تُخفى</div>
+    </div>
+    <label class="toggle"><input type="checkbox" id="hide_empty" onchange="saveDisplay()"/><span class="toggle-slider"></span></label>
+  </div>
+
+  <!-- ميزة 14: الإجمالي التراكمي -->
+  <div class="toggle-row">
+    <div>
+      <div class="toggle-label">إظهار الإجمالي التراكمي أسفل كل جدول</div>
+      <div class="toggle-sub">يُضيف سطر ملوّن يُجمع كل الأعمدة حتى هذه النقطة من الجداول</div>
+    </div>
+    <label class="toggle"><input type="checkbox" id="show_cumulative" onchange="saveDisplay()"/><span class="toggle-slider"></span></label>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     8. TABLE COLOR TAGS  (ميزة 15)
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">🎨</span> ألوان تصنيف الجداول</div>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">امنح كل جدول لوناً مميزاً يساعدك في التمييز السريع بينهم.</p>
+  <div id="tableColorList" style="display:flex;flex-direction:column;gap:12px;"></div>
+  <p id="noTablesMsg" style="display:none;font-size:13px;color:var(--text-muted);">لا توجد جداول محفوظة بعد. ارجع للصفحة الرئيسية وأنشئ جداول أولاً.</p>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     9. DESKTOP MODE
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">🖥️</span> وضع الكمبيوتر على الهاتف</div>
+  <div class="toggle-row" style="border-bottom:none;">
+    <div>
+      <div class="toggle-label">تفعيل وضع الكمبيوتر</div>
+      <div class="toggle-sub">يجعل الموقع يظهر بعرض شاشة الكمبيوتر داخل الهاتف</div>
+    </div>
+    <label class="toggle"><input type="checkbox" id="desktopMode" onchange="toggleDesktopMode()"/><span class="toggle-slider"></span></label>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     10. MULTIPLIERS
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">🔧</span> مضاريب الحسابات التلقائية</div>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">عند إدخال عدد الحركات، يتم ضرب الرقم تلقائياً في هذه المضاريب لكل خانة.</p>
+  <div style="overflow-x:auto;">
+    <table class="mult-table">
+      <thead><tr><th>الخانة</th><th>المضروب</th><th>مثال: 5 حركات</th></tr></thead>
+      <tbody>
+        <tr><td>أمانات</td><td><input class="mult-input" type="number" id="mult_a" min="0" oninput="updateExample('mult_a','ex_a')"/></td><td id="ex_a" style="color:var(--primary);font-weight:900;">-</td></tr>
+        <tr><td>ط.شهيد</td><td><input class="mult-input" type="number" id="mult_s" min="0" oninput="updateExample('mult_s','ex_s')"/></td><td id="ex_s" style="color:var(--primary);font-weight:900;">-</td></tr>
+        <tr><td>ط.شرطة</td><td><input class="mult-input" type="number" id="mult_p" min="0" oninput="updateExample('mult_p','ex_p')"/></td><td id="ex_p" style="color:var(--primary);font-weight:900;">-</td></tr>
+        <tr><td>مسنين</td><td><input class="mult-input" type="number" id="mult_old" min="0" oninput="updateExample('mult_old','ex_old')"/></td><td id="ex_old" style="color:var(--primary);font-weight:900;">-</td></tr>
+        <tr><td>إعاقة</td><td><input class="mult-input" type="number" id="mult_dis" min="0" oninput="updateExample('mult_dis','ex_dis')"/></td><td id="ex_dis" style="color:var(--primary);font-weight:900;">-</td></tr>
+        <tr style="background:var(--surface2);"><td>⚙️ ميكنة (ثابت للصف)</td><td><input class="mult-input" type="number" id="mech_val" min="0"/></td><td style="font-size:12px;color:var(--text-muted);">ثابت</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row" style="margin-top:16px;">
+    <button class="s-btn s-btn-success" onclick="saveMultipliers()">💾 حفظ المضاريب</button>
+    <button class="s-btn s-btn-gray" onclick="resetMultipliers()">↺ إعادة الافتراضي</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     11. PRINT SETTINGS
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">🖨️</span> إعدادات الطباعة</div>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">اختر عدد الأوراق عند الطباعة:</p>
+  <div class="print-options" id="printOpts">
+    <div class="print-opt" onclick="setPrintPages(1)" id="pp-1"><span class="opt-num">1</span>ورقة</div>
+    <div class="print-opt" onclick="setPrintPages(2)" id="pp-2"><span class="opt-num">2</span>ورقتين</div>
+    <div class="print-opt" onclick="setPrintPages(3)" id="pp-3"><span class="opt-num">3</span>ثلاث</div>
+    <div class="print-opt" onclick="setPrintPages(4)" id="pp-4"><span class="opt-num">4</span>أربع</div>
+  </div>
+  <div class="btn-row" style="margin-top:14px;">
+    <button class="s-btn s-btn-primary" onclick="savePrintSettings()">💾 حفظ إعدادات الطباعة</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     12. BACKUP  (ميزة 16 + 17 + 18)
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">💾</span> النسخ الاحتياطي</div>
+
+  <!-- ميزة 16: تصدير الإعدادات -->
+  <!-- ميزة 17: استيراد الإعدادات -->
+  <div id="backupStatusBadge" class="backup-status backup-ok">⏱️ جاري التحقق...</div>
+
+  <!-- ميزة 18: تذكير النسخ الاحتياطي -->
+  <div class="s-field">
+    <label>تذكيري بالنسخ الاحتياطي كل (أيام)</label>
+    <input class="s-input" type="number" id="backup_remind_days" min="0" max="90" placeholder="7" style="width:120px;"/>
+    <small style="color:var(--text-muted);font-size:12px;display:block;margin-top:4px;">0 = تعطيل التذكير</small>
+  </div>
+
+  <div class="btn-row">
+    <button class="s-btn s-btn-primary" onclick="exportSettings()">📤 تصدير الإعدادات</button>
+    <button class="s-btn s-btn-gray" onclick="document.getElementById('importSettFile').click()">📥 استيراد الإعدادات</button>
+    <input type="file" id="importSettFile" accept=".json" style="display:none" onchange="importSettings(event)"/>
+    <button class="s-btn s-btn-success" onclick="recordBackup()">✅ سجّل نسخة احتياطية الآن</button>
+  </div>
+  <div class="btn-row" style="margin-top:6px;">
+    <button class="s-btn s-btn-gray s-btn-sm" onclick="saveBackupSettings()">💾 حفظ إعداد التذكير</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     13. STORAGE STATS  (ميزة 19)
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">📊</span> إحصائيات التخزين</div>
+  <div class="stats-grid" id="storageStatsGrid">
+    <div class="stat-box"><div class="stat-box-val" id="st-tables">-</div><div class="stat-box-label">عدد الجداول</div></div>
+    <div class="stat-box"><div class="stat-box-val" id="st-filled">-</div><div class="stat-box-label">صفوف ممتلئة</div></div>
+    <div class="stat-box"><div class="stat-box-val" id="st-empty">-</div><div class="stat-box-label">صفوف فارغة</div></div>
+    <div class="stat-box"><div class="stat-box-val" id="st-done">-</div><div class="stat-box-label">جداول مكتملة</div></div>
+    <div class="stat-box"><div class="stat-box-val" id="st-size">-</div><div class="stat-box-label">حجم البيانات</div></div>
+    <div class="stat-box"><div class="stat-box-val" id="st-arch">-</div><div class="stat-box-label">ملفات مؤرشفة</div></div>
+  </div>
+  <div style="margin-top:14px;">
+    <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:4px;">
+      <span>استخدام التخزين المحلي</span><span id="st-pct">-</span>
+    </div>
+    <div class="storage-bar"><div class="storage-fill" id="st-bar" style="width:0%;"></div></div>
+    <small style="color:var(--text-muted);font-size:11px;">الحد التقريبي للمتصفح: 5 MB</small>
+  </div>
+  <div class="btn-row" style="margin-top:14px;">
+    <button class="s-btn s-btn-gray s-btn-sm" onclick="refreshStats()">🔄 تحديث</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     14. KEYBOARD SHORTCUTS  (ميزة 20)
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">⌨️</span> اختصارات لوحة المفاتيح</div>
+  <table class="shortcut-table">
+    <tr><td><span class="key">Enter</span></td><td>إضافة الصف الحالي للجدول</td></tr>
+    <tr><td><span class="key">Escape</span></td><td>إغلاق أي نافذة منبثقة</td></tr>
+    <tr><td><span class="key">Ctrl + Z</span></td><td>تراجع عن آخر حذف (زرار التراجع)</td></tr>
+    <tr><td><span class="key">Tab</span></td><td>الانتقال للحقل التالي في النموذج</td></tr>
+    <tr><td><span class="key">Alt + S</span></td><td>فتح الإحصائيات (من الصفحة الرئيسية)</td></tr>
+    <tr><td><span class="key">Alt + G</span></td><td>إظهار / إخفاء الإجمالي الكلي</td></tr>
+    <tr><td><span class="key">Alt + 1</span></td><td>وضع العرض: سكرول</td></tr>
+    <tr><td><span class="key">Alt + 2</span></td><td>وضع العرض: تركيز</td></tr>
+    <tr><td><span class="key">Alt + 3</span></td><td>وضع العرض: مراجعة</td></tr>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     15. FACTORY RESET
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">🗑️</span> إعادة ضبط المصنع</div>
+  <p style="font-size:14px;color:var(--text-muted);line-height:1.7;margin-bottom:16px;">
+    ⚠️ هذا الإجراء سيحذف جميع البيانات والملفات المحفوظة والإعدادات وإعادتها للقيم الافتراضية. <strong style="color:var(--danger);">لا يمكن التراجع.</strong>
+  </p>
+  <div class="btn-row">
+    <button class="s-btn s-btn-danger" onclick="openResetModal()">🗑️ إعادة ضبط المصنع</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     16. ABOUT
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">ℹ️</span> معلومات عن التطبيق</div>
+  <div class="about-logo">
+    <span class="big-icon">⚓</span>
+    <div class="about-name" id="about-app-name">منظومة الكابتن سعيد</div>
+    <div class="about-version">الإصدار 3.0 · 2025</div>
+  </div>
+  <div class="about-desc">نظام متكامل لإدارة الحركات المالية وتتبع البيانات،<br/>مصمم خصيصاً لتسهيل عمليات الإدخال والحسابات التلقائية.</div>
+  <div class="about-info">
+    <div class="about-item"><div class="about-item-val">30</div><div class="about-item-label">صف في كل جدول</div></div>
+    <div class="about-item"><div class="about-item-val">∞</div><div class="about-item-label">جداول بلا حدود</div></div>
+    <div class="about-item"><div class="about-item-val">5</div><div class="about-item-label">ثيمات مدعومة</div></div>
+    <div class="about-item"><div class="about-item-val">PWA</div><div class="about-item-label">تطبيق ويب تقدمي</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     17. CONTACT
+══════════════════════════════════════════════════════ -->
+<div class="s-card">
+  <div class="s-card-title"><span class="icon">💬</span> تواصل مع المطور</div>
+  <div class="contact-card">
+    <div class="contact-avatar">👨‍💻</div>
+    <div>
+      <div class="contact-name">أحمد سعيد</div>
+      <div class="contact-phone" dir="ltr">+01090844039</div>
+    </div>
+  </div>
+  <div class="btn-row" style="margin-top:14px;">
+    <a class="s-btn s-btn-whatsapp" href="https://wa.me/201090844039" target="_blank" rel="noopener" style="text-decoration:none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      واتساب - أحمد سعيد
+    </a>
+  </div>
+</div>
+
+</div><!-- /settings-body -->
+
+<!-- RESET MODAL -->
+<div class="modal-ov" id="resetModal">
+  <div class="modal-box">
+    <h3>⚠️ تأكيد إعادة الضبط</h3>
+    <p style="color:var(--text-muted);font-size:14px;line-height:1.7;text-align:center;margin-bottom:6px;">سيتم حذف جميع البيانات والإعدادات نهائياً.<br/>هل أنت متأكد من المتابعة؟</p>
+    <div class="modal-btns">
+      <button class="s-btn s-btn-danger" style="justify-content:center;" onclick="doFactoryReset()">🗑️ نعم، أعد الضبط</button>
+      <button class="s-btn s-btn-gray"   style="justify-content:center;" onclick="closeModal('resetModal')">إلغاء ✕</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-set"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// STORAGE KEYS
+// ═══════════════════════════════════════════
+const STORE_SETTINGS = 'cs_settings_v1';
+const STORE_THEME    = 'cs_theme';
+const STORE_PASS     = 'cs_password';
+const STORE_TABLES   = 'cs_tables_v2';
+const STORE_ARCH     = 'cs_arch_v1';
+const STORE_BACKUP   = 'cs_last_backup';
+const TABLE_COLORS   = 'cs_table_colors';
+
+function loadSett(){try{return JSON.parse(localStorage.getItem(STORE_SETTINGS))||{};}catch{return {};}}
+function saveSett(s){localStorage.setItem(STORE_SETTINGS,JSON.stringify(s));}
+
+const settings = loadSett();
+const themeNames = {light:'فاتح',dark:'داكن',ocean:'أزرق المحيط',forest:'أخضر الغابة',warm:'دافئ'};
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+(function init(){
+  // Theme
+  applyTheme(localStorage.getItem(STORE_THEME)||'dark', false);
+
+  // Identity (features 1-3)
+  document.getElementById('owner_name').value   = settings.owner_name   || '';
+  document.getElementById('unit_name').value    = settings.unit_name    || '';
+  document.getElementById('print_header').value = settings.print_header || '';
+  const oname = settings.owner_name || 'الكابتن سعيد';
+  document.getElementById('about-app-name').textContent = 'منظومة ' + oname;
+
+  // Appearance (features 4-6)
+  setFontSize(settings.font_size || 'md', false);
+  setRowHeight(settings.row_height || 'normal', false);
+  document.getElementById('mark_color').value = settings.mark_color || '#fef3c7';
+
+  // Column visibility (feature 7)
+  const cols = settings.col_vis || {};
+  ['a','s','p','old','dis','m'].forEach(c=>{
+    const el = document.getElementById('col_'+c);
+    const visible = cols[c]!==false;
+    el.checked = visible;
+    el.closest('.col-toggle-item').classList.toggle('active', visible);
+  });
+
+  // Protection (features 8-11)
+  document.getElementById('confirm_delete').checked = !!settings.confirm_delete;
+  document.getElementById('lock_done').checked       = !!settings.lock_done;
+  document.getElementById('max_count').value         = settings.max_count   || 0;
+  document.getElementById('alert_amanat').value      = settings.alert_amanat|| 0;
+
+  // Display (features 12-14)
+  document.getElementById('sound_on').checked          = !!settings.sound_on;
+  document.getElementById('hide_empty').checked        = !!settings.hide_empty;
+  document.getElementById('show_cumulative').checked   = !!settings.show_cumulative;
+
+  // Desktop mode
+  document.getElementById('desktopMode').checked = !!settings.desktopMode;
+
+  // Multipliers
+  document.getElementById('mult_a').value   = settings.mult_a   !== undefined ? settings.mult_a   : 100;
+  document.getElementById('mult_s').value   = settings.mult_s   !== undefined ? settings.mult_s   : 5;
+  document.getElementById('mult_p').value   = settings.mult_p   !== undefined ? settings.mult_p   : 15;
+  document.getElementById('mult_old').value = settings.mult_old !== undefined ? settings.mult_old : 5;
+  document.getElementById('mult_dis').value = settings.mult_dis !== undefined ? settings.mult_dis : 5;
+  document.getElementById('mech_val').value = settings.mech_val !== undefined ? settings.mech_val : 35;
+  updateAllExamples();
+
+  // Print pages
+  setPrintPages(settings.print_pages || 1, false);
+
+  // Backup reminder (feature 18)
+  document.getElementById('backup_remind_days').value = settings.backup_remind_days || 7;
+  refreshBackupStatus();
+
+  // Table color tags (feature 15)
+  renderTableColorList();
+
+  // Storage stats (feature 19)
+  refreshStats();
+
+  // Password feedback
+  document.getElementById('oldPass').addEventListener('input', function(){
+    const correct = localStorage.getItem(STORE_PASS)||'123';
+    const msg = document.getElementById('pass-msg');
+    if(!this.value){msg.textContent='';return;}
+    const ok = this.value === correct;
+    msg.textContent = ok ? '✅ كلمة المرور الحالية صحيحة' : '❌ كلمة المرور الحالية غلط';
+    msg.style.color = ok ? 'var(--success)' : 'var(--danger)';
+  });
+})();
+
+// ═══════════════════════════════════════════
+// THEME
+// ═══════════════════════════════════════════
+function setTheme(t){ applyTheme(t,true); }
+function applyTheme(t,toast){
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem(STORE_THEME,t);
+  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
+  const el=document.getElementById('th-'+t);
+  if(el) el.classList.add('active');
+  if(toast) showToast('✅ تم تطبيق الثيم: '+themeNames[t]);
+}
+
+// ═══════════════════════════════════════════
+// FEATURE 1-3: IDENTITY
+// ═══════════════════════════════════════════
+function saveIdentity(){
+  settings.owner_name   = document.getElementById('owner_name').value.trim();
+  settings.unit_name    = document.getElementById('unit_name').value.trim();
+  settings.print_header = document.getElementById('print_header').value.trim();
+  saveSett(settings);
+  showToast('✅ تم حفظ هوية المنظومة');
+}
+
+// ═══════════════════════════════════════════
+// FEATURE 4: FONT SIZE
+// ═══════════════════════════════════════════
+function setFontSize(sz, save=true){
+  ['sm','md','lg'].forEach(s=>document.getElementById('fs-'+s).classList.remove('active'));
+  document.getElementById('fs-'+sz).classList.add('active');
+  if(save){ settings.font_size=sz; saveSett(settings); showToast('✅ حجم الخط: '+(sz==='sm'?'صغير':sz==='md'?'متوسط':'كبير')); }
+}
+
+// ═══════════════════════════════════════════
+// FEATURE 5: ROW HEIGHT
+// ═══════════════════════════════════════════
+function setRowHeight(rh, save=true){
+  ['compact','normal','comfort'].forEach(s=>document.getElementById('rh-'+s).classList.remove('active'));
+  document.getElementById('rh-'+rh).classList.add('active');
+  if(save){ settings.row_height=rh; saveSett(settings); showToast('✅ ارتفاع الصفوف: '+(rh==='compact'?'ضيق':rh==='normal'?'عادي':'مريح')); }
+}
+
+// ═══════════════════════════════════════════
+// FEATURE 6 + APPEARANCE SAVE
+// ═══════════════════════════════════════════
+function saveAppearance(){
+  settings.mark_color = document.getElementById('mark_color').value;
+  const fsActive = document.querySelector('#fontSizeCtrl .seg-btn.active');
+  if(fsActive) settings.font_size = fsActive.id.replace('fs-','');
+  const rhActive = document.querySelector('#rowHeightCtrl .seg-btn.active');
+  if(rhActive) settings.row_height = rhActive.id.replace('rh-','');
+  saveSett(settings);
+  showToast('✅ تم حفظ إعدادات المظهر');
+}
+
+// ═══════════════════════════════════════════
+// FEATURE 7: COLUMN VISIBILITY
+// ═══════════════════════════════════════════
+function saveColVisibility(){
+  const cols = {};
+  ['a','s','p','old','dis','m'].forEach(c=>{
+    const el = document.getElementById('col_'+c);
+    cols[c] = el.checked;
+    el.closest('.col-toggle-item').classList.toggle('active', el.checked);
+  });
+  settings.col_vis = cols;
+  saveSett(settings);
+  showToast('✅ تم حفظ إعدادات الأعمدة');
+}
+
+// ═══════════════════════════════════════════
+// FEATURE 8-11: PROTECTION
+// ═══════════════════════════════════════════
+function saveProt(){
+  settings.confirm_delete = document.getElementById('confirm_delete').checked;
+  settings.lock_done      = document.getElementById('lock_done').checked;
+  settings.max_count      = parseInt(document.getElementById('max_count').value)||0;
+  settings.alert_amanat   = parseInt(document.getElementById('alert_amanat').value)||0;
+  saveSett(settings);
+  showToast('✅ تم حفظ إعدادات الحماية');
+}
+
+// ═══════════════════════════════════════════
+// FEATURE 12-14: DISPLAY
+// ═══════════════════════════════════════════
+function saveDisplay(){
+  settings.sound_on        = document.getElementById('sound_on').checked;
+  settings.hide_empty      = document.getElementById('hide_empty').checked;
+  settings.show_cumulative = document.getElementById('show_cumulative').checked;
+  saveSett(settings);
+  showToast('✅ تم حفظ إعدادات الإشعارات');
+}
+
+// ═══════════════════════════════════════════
+// FEATURE 15: TABLE COLOR TAGS
+// ═══════════════════════════════════════════
+const COLOR_OPTIONS = [
+  {val:'none',  label:'بدون', hex:'#94a3b8'},
+  {val:'red',   label:'أحمر',  hex:'#ef4444'},
+  {val:'orange',label:'برتقالي',hex:'#f97316'},
+  {val:'yellow',label:'أصفر', hex:'#eab308'},
+  {val:'green', label:'أخضر',  hex:'#22c55e'},
+  {val:'blue',  label:'أزرق',  hex:'#3b82f6'},
+  {val:'purple',label:'بنفسجي',hex:'#a855f7'},
+];
+function renderTableColorList(){
+  const list = document.getElementById('tableColorList');
+  const noMsg= document.getElementById('noTablesMsg');
+  let tables = [];
+  try{ tables = JSON.parse(localStorage.getItem(STORE_TABLES))||[]; }catch{}
+  const savedColors = JSON.parse(localStorage.getItem(TABLE_COLORS)||'{}');
+  if(!tables.length){ list.style.display='none'; noMsg.style.display='block'; return; }
+  noMsg.style.display='none'; list.style.display='flex';
+  list.innerHTML = tables.map((t,i)=>{
+    const cur = savedColors[i]||'none';
+    const swatches = COLOR_OPTIONS.map(c=>`
+      <div class="tbl-color-item" title="${c.label}">
+        <div class="tbl-color-swatch${cur===c.val?' active':''}"
+          style="background:${c.hex};"
+          onclick="setTableColor(${i},'${c.val}',this)"></div>
+        <div class="tbl-color-label">${c.label}</div>
+      </div>`).join('');
+    return `<div style="border:1px solid var(--border);border-radius:10px;padding:12px;">
+      <div style="font-size:14px;font-weight:900;margin-bottom:10px;color:var(--text);">📋 ${t.name}</div>
+      <div class="tbl-color-grid">${swatches}</div>
+    </div>`;
+  }).join('');
+}
+function setTableColor(tIdx, colorVal, el){
+  const saved = JSON.parse(localStorage.getItem(TABLE_COLORS)||'{}');
+  saved[tIdx] = colorVal;
+  localStorage.setItem(TABLE_COLORS, JSON.stringify(saved));
+  // Update active state visually
+  const parent = el.closest('[style*="border"]');
+  parent.querySelectorAll('.tbl-color-swatch').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  showToast('🎨 تم تعيين اللون');
+}
+
+// ═══════════════════════════════════════════
+// DESKTOP MODE
+// ═══════════════════════════════════════════
+function toggleDesktopMode(){
+  const on = document.getElementById('desktopMode').checked;
+  settings.desktopMode = on;
+  saveSett(settings);
+  showToast(on ? '🖥️ وضع الكمبيوتر مفعّل' : '📱 وضع الكمبيوتر مُعطّل');
+}
+
+// ═══════════════════════════════════════════
+// PASSWORD
+// ═══════════════════════════════════════════
+function changePassword(){
+  const oldV=document.getElementById('oldPass').value;
+  const newV=document.getElementById('newPass').value;
+  const confV=document.getElementById('confirmPass').value;
+  const msg=document.getElementById('pass-msg');
+  const correct=localStorage.getItem(STORE_PASS)||'123';
+  if(oldV!==correct){msg.textContent='❌ كلمة المرور الحالية غلط';msg.style.color='var(--danger)';return;}
+  if(!newV){msg.textContent='⚠️ أدخل كلمة المرور الجديدة';msg.style.color='var(--danger)';return;}
+  if(newV!==confV){msg.textContent='❌ كلمة المرور الجديدة غير متطابقة';msg.style.color='var(--danger)';return;}
+  if(newV.length<3){msg.textContent='⚠️ كلمة المرور يجب أن تكون 3 أحرف على الأقل';msg.style.color='var(--danger)';return;}
+  localStorage.setItem(STORE_PASS,newV);
+  ['oldPass','newPass','confirmPass'].forEach(id=>{const el=document.getElementById(id);el.value='';el.disabled=id!=='oldPass'?true:false;});
+  msg.textContent='✅ تم تغيير كلمة المرور بنجاح!';
+  msg.style.color='var(--success)';
+  showToast('✅ تم تغيير كلمة المرور');
+}
+
+// ═══════════════════════════════════════════
+// MULTIPLIERS
+// ═══════════════════════════════════════════
+function updateExample(inputId,exId){ document.getElementById(exId).textContent=5*(parseFloat(document.getElementById(inputId).value)||0); }
+function updateAllExamples(){ ['a','s','p','old','dis'].forEach(c=>updateExample('mult_'+c,'ex_'+c)); }
+function saveMultipliers(){
+  ['a','s','p','old','dis'].forEach(c=>{ settings['mult_'+c]=parseFloat(document.getElementById('mult_'+c).value)||0; });
+  settings.mech_val = parseFloat(document.getElementById('mech_val').value)||35;
+  saveSett(settings);
+  showToast('✅ تم حفظ المضاريب بنجاح');
+}
+function resetMultipliers(){
+  const def={mult_a:100,mult_s:5,mult_p:15,mult_old:5,mult_dis:5,mech_val:35};
+  Object.entries(def).forEach(([k,v])=>{ document.getElementById(k).value=v; });
+  updateAllExamples();
+  showToast('↺ تم إعادة المضاريب للقيم الافتراضية');
+}
+
+// ═══════════════════════════════════════════
+// PRINT
+// ═══════════════════════════════════════════
+let selectedPages=1;
+function setPrintPages(n,save=true){
+  selectedPages=n;
+  document.querySelectorAll('.print-opt').forEach(el=>el.classList.remove('active'));
+  const el=document.getElementById('pp-'+n);
+  if(el) el.classList.add('active');
+  if(save){ settings.print_pages=n; saveSett(settings); }
+}
+function savePrintSettings(){
+  settings.print_pages=selectedPages;
+  saveSett(settings);
+  showToast('✅ تم حفظ إعداد الطباعة: '+selectedPages+' '+(selectedPages===1?'ورقة':'أوراق'));
+}
+
+// ═══════════════════════════════════════════
+// FEATURE 16+17: EXPORT / IMPORT SETTINGS
+// ═══════════════════════════════════════════
+function exportSettings(){
+  const data = {
+    settings: loadSett(),
+    theme: localStorage.getItem(STORE_THEME),
+    table_colors: localStorage.getItem(TABLE_COLORS),
+    exported_at: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'captain_said_settings_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  showToast('📤 تم تصدير الإعدادات');
+}
+function importSettings(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    try{
+      const data = JSON.parse(ev.target.result);
+      if(data.settings) saveSett(data.settings);
+      if(data.theme) localStorage.setItem(STORE_THEME, data.theme);
+      if(data.table_colors) localStorage.setItem(TABLE_COLORS, data.table_colors);
+      showToast('✅ تم استيراد الإعدادات - سيتم إعادة تحميل الصفحة');
+      setTimeout(()=>location.reload(), 1500);
+    }catch(err){
+      showToast('❌ ملف غير صحيح');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value='';
+}
+
+// ═══════════════════════════════════════════
+// FEATURE 18: BACKUP REMINDER
+// ═══════════════════════════════════════════
+function recordBackup(){
+  const now = new Date().toISOString();
+  localStorage.setItem(STORE_BACKUP, now);
+  refreshBackupStatus();
+  showToast('✅ تم تسجيل النسخة الاحتياطية');
+}
+function saveBackupSettings(){
+  settings.backup_remind_days = parseInt(document.getElementById('backup_remind_days').value)||7;
+  saveSett(settings);
+  refreshBackupStatus();
+  showToast('✅ تم حفظ إعداد التذكير');
+}
+function refreshBackupStatus(){
+  const badge = document.getElementById('backupStatusBadge');
+  const last  = localStorage.getItem(STORE_BACKUP);
+  const days  = settings.backup_remind_days || 7;
+  if(!last){
+    badge.className='backup-status backup-warn';
+    badge.textContent='⚠️ لم يتم عمل نسخة احتياطية بعد!';
+    return;
+  }
+  const diffDays = Math.floor((Date.now()-new Date(last).getTime())/(86400000));
+  if(days>0 && diffDays>=days){
+    badge.className='backup-status backup-warn';
+    badge.textContent='⚠️ آخر نسخة احتياطية منذ '+diffDays+' يوم - يُنصح بعمل نسخة';
+  } else {
+    badge.className='backup-status backup-ok';
+    badge.textContent='✅ آخر نسخة احتياطية منذ '+(diffDays===0?'اليوم':diffDays+' يوم');
+  }
+}
+
+// ═══════════════════════════════════════════
+// FEATURE 19: STORAGE STATS
+// ═══════════════════════════════════════════
+function refreshStats(){
+  let tables=[], arch=[];
+  try{ tables=JSON.parse(localStorage.getItem(STORE_TABLES))||[]; }catch{}
+  try{ arch=JSON.parse(localStorage.getItem(STORE_ARCH))||[]; }catch{}
+  const ROWS_PER=30;
+  const filled = tables.reduce((s,t)=>s+t.rows.filter(r=>r.count!==''&&r.count!==null&&r.count!==undefined).length,0);
+  const total  = tables.length*ROWS_PER;
+  const done   = tables.filter(t=>t.rows.filter(r=>r.count!==''&&r.count!==null&&r.count!==undefined).length===ROWS_PER).length;
+
+  // Calc localStorage size
+  let totalBytes=0;
+  for(let key in localStorage){ if(localStorage.hasOwnProperty(key)) totalBytes+=((localStorage[key].length+key.length)*2); }
+  const kb = (totalBytes/1024).toFixed(1);
+  const mb = (totalBytes/(1024*1024));
+  const pct= Math.min(100,(mb/5*100)).toFixed(1);
+
+  document.getElementById('st-tables').textContent = tables.length;
+  document.getElementById('st-filled').textContent = filled;
+  document.getElementById('st-empty').textContent  = Math.max(0,total-filled);
+  document.getElementById('st-done').textContent   = done;
+  document.getElementById('st-size').textContent   = kb+' KB';
+  document.getElementById('st-arch').textContent   = arch.length;
+  document.getElementById('st-pct').textContent    = pct+'%';
+  document.getElementById('st-bar').style.width    = pct+'%';
+  document.getElementById('st-bar').style.background =
+    mb>4 ? '#ef4444' : mb>2 ? '#f59e0b' : 'linear-gradient(90deg,var(--primary),var(--primary-light))';
+}
+
+// ═══════════════════════════════════════════
+// FACTORY RESET
+// ═══════════════════════════════════════════
+function openResetModal(){ document.getElementById('resetModal').classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.modal-ov').forEach(el=>{
+  el.addEventListener('click',function(e){if(e.target===this)this.classList.remove('show');});
+});
+function doFactoryReset(){
+  localStorage.clear();
+  closeModal('resetModal');
+  showToast('✅ تم إعادة الضبط - جاري التحويل...', 2500);
+  setTimeout(()=>{ window.location.href='index.html'; }, 2600);
+}
+
+// ═══════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════
+let toastT;
+function showToast(msg,dur=3000){
+  const el=document.getElementById('toast-set');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>el.classList.remove('show'),dur);
+}
+</script>
+</body>
+</html>
