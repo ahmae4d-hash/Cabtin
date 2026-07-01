@@ -1,4 +1,4 @@
-const CACHE = 'captain-saeed-v3.0.2';
+const CACHE = 'captain-saeed-v3.1';
 const ASSETS = [
   'index.html',
   'manifest.json',
